@@ -1,642 +1,993 @@
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HexaWave Files - Compartilhamento de Arquivos Inteligente</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6.3.7/themes/light.css">
+    <title>HexaWave Network Console</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary-color: #ffffff;
-            --secondary-color: #f8f9fa;
-            --text-color: #333333;
-            --accent-color: #3498db;
-            --accent-hover: #2980b9;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --error-color: #e74c3c;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Source Code Pro', monospace;
+            background-color: #000;
+            color: #0f0;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        header {
-            background-color: var(--primary-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        #loading-screen {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        header.scrolled {
-            background-color: rgba(255, 255, 255, 0.95);
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .navbar-brand img {
-            height: 40px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        /* Hero Section */
-        #hero {
-            background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
-            padding: 120px 0 80px;
-            text-align: center;
-        }
-
-        #hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-color);
-        }
-
-        #hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            color: #666;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-3px);
-        }
-
-        /* Features Section */
-        #features {
-            padding: 80px 0;
-            background-color: var(--secondary-color);
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-item {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        /* About Section */
-        #about {
-            padding: 80px 0;
-        }
-
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-        }
-
-        .about-text {
-            flex: 1;
-        }
-
-        .about-image {
-            flex: 1;
-            text-align: center;
-        }
-
-        .about-image img {
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Testimonials Section */
-        #testimonials {
-            background-color: var(--secondary-color);
-            padding: 80px 0;
-        }
-
-        .testimonial-slider {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .testimonial-item {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .testimonial-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-        }
-
-        /* Contact Section */
-        #contact {
-            padding: 80px 0;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        .footer-links {
+            height: 100%;
+            background-color: #000;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
+            align-items: center;
+            z-index: 9999;
         }
 
-        .footer-links a {
-            color: white;
-            text-decoration: none;
+        #progress-bar {
+            width: 300px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-            }
-
-            .nav-links {
-                margin-top: 1rem;
-            }
-
-            #hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .about-content {
-                flex-direction: column;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
+        #progress {
+            width: 0;
+            height: 100%;
+            background-color: #0f0;
+            transition: width 0.5s;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        #console {
+            height: 70vh;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: rgba(0, 30, 0, 0.8);
+            border: 1px solid #0f0;
         }
 
-        .animate-fadeInUp {
-            animation: fadeInUp 0.6s ease-out;
+        #input {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #0f0;
+            width: 100%;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
+        .log {
+            margin-bottom: 0.5rem;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .command {
+            color: #ff0;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
-            border-radius: 5px;
+        .error {
+            color: #f00;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-hover);
+        .success {
+            color: #0f0;
         }
 
-        /* Notification Styles */
-        .notification {
+        #status-window {
+            display: none;
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 4px;
-            color: white;
-            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background-color: rgba(0, 30, 0, 0.9);
+            border: 1px solid #0f0;
             z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            padding: 1rem;
+            overflow-y: auto;
         }
 
-        .notification.show {
-            opacity: 1;
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
         }
 
-        .notification.success {
-            background-color: var(--success-color);
+        #code-editor {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background-color: rgba(0, 30, 0, 0.9);
+            border: 1px solid #0f0;
+            z-index: 1000;
+            padding: 1rem;
         }
 
-        .notification.warning {
-            background-color: var(--warning-color);
-        }
-
-        .notification.error {
-            background-color: var(--error-color);
+        #code-input {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #0f0;
+            resize: none;
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <nav class="navbar container">
-            <a href="#" class="navbar-brand">
-                <img src="https://i.ibb.co/DGwGS5r/watermark-preview-image20241017-1-1i24v3l-transformed-removebg-preview.png" alt="HexaWave Files Logo">
-            </a>
-            <div class="nav-links">
-                <a href="#features">Recursos</a>
-                <a href="#about">Sobre</a>
-                <a href="#testimonials">Depoimentos</a>
-                <a href="#contact">Contato</a>
-                <a href="HxEntrar.html" class="cta-button">Começar</a>
+<body class="text-green-500">
+    <div id="loading-screen">
+        <div>
+            <h1 class="text-3xl mb-4">HexaWave Network Console</h1>
+            <div id="progress-bar">
+                <div id="progress"></div>
             </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="hero">
-        <div class="container">
-            <h1 class="animate__animated animate__fadeInDown">Compartilhe Arquivos com Segurança e Facilidade</h1>
-            <p class="animate__animated animate__fadeInUp">HexaWave Files oferece uma plataforma intuitiva e segura para armazenar, compartilhar e colaborar em seus arquivos importantes.</p>
-            <a href="HxEntrar.html" class="cta-button animate__animated animate__bounceIn">Experimente Gratuitamente</a>
+            <p id="loading-text" class="mt-2">Initializing... 0%</p>
         </div>
-    </section>
+    </div>
 
-    <!-- Features Section -->
-    <section id="features">
-        <div class="container">
-            <h2 class="text-center mb-5">Recursos Incríveis</h2>
-            <div class="feature-grid">
-                <div class="feature-item" data-aos="fade-up">
-                    <i class="feature-icon fas fa-lock"></i>
-                    <h3>Segurança Avançada</h3>
-                    <p>Proteja seus arquivos com criptografia de ponta a ponta e autenticação de dois fatores.</p>
-                </div>
-                <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
-                    <i class="feature-icon fas fa-share-alt"></i>
-                    <h3>Compartilhamento Fácil</h3>
-                    <p>Compartilhe arquivos e pastas com apenas alguns cliques, definindo permissões personalizadas.</p>
-                </div>
-                <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
-                    <i class="feature-icon fas fa-sync-alt"></i>
-                    <h3>Sincronização Automática</h3>
-                    <p>Mantenha seus arquivos atualizados em todos os dispositivos com sincronização em tempo real.</p>
-                </div>
-                <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
-                    <i class="feature-icon fas fa-history"></i>
-                    <h3>Controle de Versões</h3>
-                    <p>Acesse e restaure versões anteriores de seus arquivos com facilidade.</p>
-                </div>
+    <div id="main-content" class="container mx-auto p-4" style="display: none;">
+        <h1 class="text-3xl mb-4">HexaWave Network Console</h1>
+        <div id="console" class="mb-4"></div>
+        <div class="flex items-center">
+            <span class="mr-2">$</span>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
+
+    <div id="status-window">
+        <span class="close-btn">&times;</span>
+        <h2 class="text-2xl mb-4">System Status</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <h3 class="text-xl mb-2">CPU Usage</h3>
+                <canvas id="cpu-chart"></canvas>
+            </div>
+            <div>
+                <h3 class="text-xl mb-2">Memory Usage</h3>
+                <canvas id="memory-chart"></canvas>
+            </div>
+            <div>
+                <h3 class="text-xl mb-2">Network Traffic</h3>
+                <canvas id="network-chart"></canvas>
+            </div>
+            <div>
+                <h3 class="text-xl mb-2">Disk Usage</h3>
+                <canvas id="disk-chart"></canvas>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text" data-aos="fade-right">
-                    <h2>Sobre o HexaWave Files</h2>
-                    <p>HexaWave Files nasceu da necessidade de uma solução de compartilhamento de arquivos que fosse ao mesmo tempo segura e fácil de usar. Nossa missão é proporcionar uma experiência sem complicações para indivíduos e equipes que precisam colaborar em projetos e compartilhar informações importantes.</p>
-                    <p>Com uma equipe dedicada de engenheiros e designers, estamos constantemente inovando e melhorando nossa plataforma para atender às necessidades em constante evolução de nossos usuários.</p>
-                </div>
-                <div class="about-image" data-aos="fade-left">
-                    <img src="https://i.ibb.co/N6szRZK/images.jpg" alt="Planeta Terra">
-                </div>
-            </div>
-        </div>
-    </section>
+    <div id="code-editor">
+        <span class="close-btn">&times;</span>
+        <textarea id="code-input"></textarea>
+    </div>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials">
-        <div class="container">
-            <h2 class="text-center mb-5">O que Nossos Clientes Dizem</h2>
-            <div class="swiper testimonial-slider">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Avatar" class="testimonial-avatar">
-                            <p>"HexaWave Files revolucionou a forma como nossa equipe colabora em projetos. É incrivelmente fácil de usar e super seguro!"</p>
-                            <h4>Maria Silva</h4>
-                            <p>Gerente de Projetos,   TechCorp</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="testimonial-avatar">
-                            <p>"Desde que começamos a usar o HexaWave Files, nossa produtividade aumentou significativamente. Recomendo a todas as empresas!"</p>
-                            <h4>João Santos</h4>
-                            <p>CEO, Inovação Ltda</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Avatar" class="testimonial-avatar">
-                            <p>"A segurança e a facilidade de uso do HexaWave Files são incomparáveis. É a solução perfeita para nossas necessidades de compartilhamento de arquivos."</p>
-                            <h4>Ana Oliveira</h4>
-                            <p>Diretora de TI, Mega Corporação</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <h2 class="text-center mb-5">Entre em Contato</h2>
-            <form class="contact-form" data-aos="fade-up">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Seu Nome" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" class="form-control" placeholder="Seu E-mail" required>
-                </div>
-                <div class="form-group">
-                    <textarea class="form-control" rows="5" placeholder="Sua Mensagem" required></textarea>
-                </div>
-                <button type="submit" class="cta-button">Enviar Mensagem</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-links">
-                <a href="#">Termos de Serviço</a>
-                <a href="#">Política de Privacidade</a>
-                <a href="#">FAQ</a>
-                <a href="#">Suporte</a>
-            </div>
-            <p>&copy; 2024 HexaWave Files. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- Notification Element -->
-    <div id="notification" class="notification"></div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
     <script type="module">
-        // Importação dos módulos do Firebase
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+        // Import Firebase
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+        import { getDatabase, ref, set, get, child } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
 
-        // Configuração do Firebase
+        // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyCSAaeTMOB7IL9EzVBpVTVSpxNLkw5f4IQ",
-            authDomain: "hexawavesite.firebaseapp.com",
-            databaseURL: "https://hexawavesite-default-rtdb.firebaseio.com",
-            projectId: "hexawavesite",
-            storageBucket: "hexawavesite.appspot.com",
-            messagingSenderId: "277310428374",
-            appId: "1:277310428374:web:0476b4e21a05e1e31ae577",
-            measurementId: "G-JCGJ9J7RG8"
+            apiKey: "AIzaSyCF50W92_ZmSLGcDLlOr8r7QtF__JchP50",
+            authDomain: "webuserdata.firebaseapp.com",
+            databaseURL: "https://webuserdata-default-rtdb.firebaseio.com",
+            projectId: "webuserdata",
+            storageBucket: "webuserdata.appspot.com",
+            messagingSenderId: "996591404387",
+            appId: "1:996591404387:web:0d2f5d16b9494de4997f56",
+            measurementId: "G-VTDKLXL5TS"
         };
 
-        // Inicialização do Firebase
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        const database = getDatabase(app);
 
-        // Verificação do estado de autenticação
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Usuário está logado, redirecionar para filesfy.html
-                window.location.href = 'filesfy.html';
-            } else {
-                // Usuário não está logado, continuar na página atual
-                console.log('Usuário não está logado');
+        // Console simulation
+        const consoleElement = document.getElementById('console');
+        const inputElement = document.getElementById('input');
+        const loadingScreen = document.getElementById('loading-screen');
+        const mainContent = document.getElementById('main-content');
+        const progressBar = document.getElementById('progress');
+        const loadingText = document.getElementById('loading-text');
+        const statusWindow = document.getElementById('status-window');
+        const codeEditor = document.getElementById('code-editor');
+        const codeInput = document.getElementById('code-input');
+
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        const commands = {
+            '/help': showHelp,
+            '/off': turnOff,
+            '/add': addScreen,
+            '/addstatus': showStatus,
+            '/edit': editScript,
+            '/execute': executeCode,
+            '/clear': clearConsole,
+            '/network': showNetworkStatus,
+            '/update': updateSystem,
+            '/backup': backupData,
+            '/restore': restoreData,
+            '/scan': scanSystem,
+            '/encrypt': encryptData,
+            '/decrypt': decryptData,
+            '/log': showLogs,
+            '/users': manageUsers,
+            '/firewall': configureFirewall,
+            '/performance': checkPerformance,
+            '/monitor': monitorResources,
+            '/config': configureSystem,
+            '/debug': debugMode,
+            '/test': runTests,
+            '/deploy': deployApplication,
+            '/rollback': rollbackChanges,
+            '/api': manageAPI,
+            '/cache': manageCache,
+            '/optimize': optimizeSystem,
+            '/report': generateReport,
+            '/alert': configureAlerts,
+            '/schedule': scheduleTask,
+            '/analyze': analyzeData,
+            '/compress': compressData,
+            '/export': exportData,
+            '/import': importData,
+            '/validate': validateData,
+            '/audit': auditSystem,
+            '/benchmark': runBenchmark,
+            '/clean': cleanupSystem,
+            '/patch': applyPatch,
+            '/simulate': runSimulation,
+            '/visualize': visualizeData,
+            '/integrate': integrateSystem,
+            '/migrate': migrateData,
+            '/scale': scaleResources,
+            '/monitor': monitorPerformance,
+            '/optimize': optimizeQueries,
+            '/index': rebuildIndexes,
+            '/replicate': replicateData,
+            '/sync': syncData,
+            '/throttle': throttleRequests,
+            '/load': loadBalanceTraffic,
+            '/partition': partitionData,
+            '/cluster': manageCluster,
+            '/stream': streamData,
+            '/transform': transformData,
+        };
+
+        function simulateLoading() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        log('HexaWave Network Console initialized. Type /help for available commands.', 'success');
+                    }, 500);
+                }
+                progressBar.style.width = `${progress}%`;
+                loadingText.textContent = `Initializing... ${Math.round(progress)}%`;
+            }, 200);
+        }
+
+        function log(message, type = 'normal') {
+            const logElement = document.createElement('div');
+            logElement.classList.add('log');
+            if (type === 'command') {
+                logElement.classList.add('command');
+            } else if (type === 'error') {
+                logElement.classList.add('error');
+            } else if (type === 'success') {
+                logElement.classList.add('success');
             }
-        });
+            logElement.textContent = message;
+            consoleElement.appendChild(logElement);
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
 
-        // Inicialização de bibliotecas e configurações
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-
-        new Swiper('.testimonial-slider', {
-            slidesPerView: 1,
-            spaceBetween: 30,
-            loop: true,
-            autoplay: {
-                delay: 5000,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-        });
-
-        // Animações com GSAP
-        gsap.from('.feature-item', {
-            duration: 1,
-            y: 50,
-            opacity: 0,
-            stagger: 0.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '#features',
-                start: 'top 80%',
-            },
-        });
-
-        // Header scroll effect
-        const header = document.querySelector('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
+        function processCommand(command) {
+            log(`$ ${command}`, 'command');
+            const [cmd, ...args] = command.split(' ');
+            if (commands[cmd]) {
+                commands[cmd](args);
             } else {
-                header.classList.remove('scrolled');
+                log(`Command not recognized: ${cmd}. Type /help for available commands.`, 'error');
             }
-        });
+        }
 
-        // Smooth scroll para links de navegação
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        function showHelp() {
+            log('Available commands:');
+            Object.keys(commands).forEach(cmd => {
+                log(`  ${cmd}`);
             });
-        });
+        }
 
-        // Tooltips
-        tippy('[data-tippy-content]', {
-            theme: 'light',
-            animation: 'scale',
-        });
-
-        // Função para exibir notificações
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
+        function turnOff() {
+            log('Shutting down HexaWave Network Console...', 'success');
             setTimeout(() => {
-                notification.classList.remove('show');
+                location.reload();
+            }, 2000);
+        }
+
+        function addScreen(args) {
+            if (args[0] === 'tela') {
+                codeEditor.style.display = 'block';
+            } else {
+                log('Usage: /add tela', 'error');
+            }
+        }
+
+        function showStatus() {
+            statusWindow.style.display = 'block';
+            updateCharts();
+        }
+
+        function editScript(args) {
+            if (args.length < 2) {
+                log('Usage: /edit script = <code>', 'error');
+                return;
+            }
+            const code = args.slice(1).join(' ');
+            try {
+                eval(code);
+                log('Script executed successfully.', 'success');
+            } catch (error) {
+                log(`Error executing script: ${error.message}`, 'error');
+            }
+        }
+
+        function executeCode(args) {
+            if (args.length < 2 || args[0] !== 'python') {
+                log('Usage: /execute python = <code>', 'error');
+                return;
+            }
+            const code = args.slice(2).join(' ');
+            log('Simulating Python code execution:');
+            log(code);
+            log('Python code execution completed.', 'success');
+        }
+
+        function clearConsole() {
+            consoleElement.innerHTML = '';
+            log('Console cleared.', 'success');
+        }
+
+        function showNetworkStatus() {
+            log('Simulating network status check...');
+            setTimeout(() => {
+                log('Network Status:', 'success');
+                log('  Uptime: 99.99%');
+                log('  Latency: 15ms');
+                log('  Bandwidth: 1Gbps');
+                log('  Active Connections: 1337');
+            }, 1000);
+        }
+
+        function updateSystem() {
+            log('Simulating system update...');
+            setTimeout(() => {
+                log('System updated successfully.', 'success');
             }, 3000);
         }
 
-        // Manipulação do formulário de contato
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Aqui você adicionaria a lógica para enviar o formulário
-            showNotification('Mensagem enviada com sucesso!', 'success');
-        });
-
-        // Animação de contagem para estatísticas
-        function animateValue(obj, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
+        function backupData() {
+            log('Simulating data backup...');
+            setTimeout(() => {
+                log('Data backup completed.', 'success');
+            }, 2000);
         }
 
-        // Exemplo de uso da animação de contagem (adicione elementos com classe 'counter' ao seu HTML)
-        document.querySelectorAll('.counter').forEach(counter => {
-            animateValue(counter, 0, parseInt(counter.getAttribute('data-target')), 2000);
-        });
+        function restoreData() {
+            log('Simulating data restoration...');
+            setTimeout(() => {
+                log('Data restored successfully.', 'success');
+            }, 2500);
+        }
 
-        // Lazy loading para imagens
-        document.addEventListener("DOMContentLoaded", function() {
-            var lazyloadImages = document.querySelectorAll("img.lazy");    
-            var lazyloadThrottleTimeout;
-            
-            function lazyload () {
-                if(lazyloadThrottleTimeout) {
-                    clearTimeout(lazyloadThrottleTimeout);
-                }    
-                
-                lazyloadThrottleTimeout = setTimeout(function() {
-                    var scrollTop = window.pageYOffset;
-                    lazyloadImages.forEach(function(img) {
-                        if(img.offsetTop < (window.innerHeight + scrollTop)) {
-                            img.src = img.dataset.src;
-                            img.classList.remove('lazy');
-                        }
-                    });
-                    if(lazyloadImages.length == 0) { 
-                        document.removeEventListener("scroll", lazyload);
-                        window.removeEventListener("resize", lazyload);
-                        window.removeEventListener("orientationChange", lazyload);
-                    }
-                }, 20);
+        function scanSystem() {
+            log('Initiating system scan...');
+            setTimeout(() => {
+                log('System scan completed. No vulnerabilities found.', 'success');
+            }, 3000);
+        }
+
+        function encryptData(args) {
+            if (args.length === 0) {
+                log('Usage: /encrypt <data>', 'error');
+                return;
             }
-            
-            document.addEventListener("scroll", lazyload);
-            window.addEventListener("resize", lazyload);
-            window.addEventListener("orientationChange", lazyload);
+            const data = args.join(' ');
+            log(`Encrypting: ${data}`);
+            const encrypted = btoa(data);
+            log(`Encrypted data: ${encrypted}`, 'success');
+        }
+
+        function decryptData(args) {
+            if (args.length === 0) {
+                log('Usage: /decrypt <encrypted_data>', 'error');
+                return;
+            }
+            const encryptedData = args.join(' ');
+            log(`Decrypting: ${encryptedData}`);
+            try {
+                const decrypted = atob(encryptedData);
+                log(`Decrypted data: ${decrypted}`, 'success');
+            } catch (error) {
+                log('Invalid encrypted data.', 'error');
+            }
+        }
+
+        function showLogs() {
+            log('Simulating log retrieval...');
+            setTimeout(() => {
+                log('Recent system logs:');
+                log('2023-05-20 10:15:23 - User authentication successful');
+                log('2023-05-20 10:16:45 - Database backup initiated');
+                log('2023-05-20 10:18:12 - Network connection established');
+                log('2023-05-20 10:20:01 - System update completed');
+            }, 1500);
+        }
+
+        function manageUsers() {
+            log('Simulating user management...');
+            setTimeout(() => {
+                log('Active users:');
+                log('  1. admin (Administrator)');
+                log('  2. john_doe (Standard User)');
+                log('    3. jane_smith (Power User)');
+            }, 1000);
+        }
+
+        function configureFirewall() {
+            log('Simulating firewall configuration...');
+            setTimeout(() => {
+                log('Firewall configured successfully.', 'success');
+                log('  Inbound connections: Restricted');
+                log('  Outbound connections: Allowed');
+                log('  Active rules: 25');
+            }, 2000);
+        }
+
+        function checkPerformance() {
+            log('Checking system performance...');
+            setTimeout(() => {
+                log('Performance check completed:', 'success');
+                log('  CPU Usage: 35%');
+                log('  Memory Usage: 60%');
+                log('  Disk I/O: 150 MB/s');
+                log('  Network Throughput: 75 Mbps');
+            }, 2500);
+        }
+
+        function monitorResources() {
+            log('Initiating resource monitoring...');
+            let seconds = 0;
+            const interval = setInterval(() => {
+                seconds++;
+                log(`Resource usage at ${seconds}s:`);
+                log(`  CPU: ${Math.floor(Math.random() * 100)}%`);
+                log(`  Memory: ${Math.floor(Math.random() * 100)}%`);
+                log(`  Disk: ${Math.floor(Math.random() * 100)}%`);
+                if (seconds >= 5) {
+                    clearInterval(interval);
+                    log('Resource monitoring completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function configureSystem() {
+            log('Simulating system configuration...');
+            setTimeout(() => {
+                log('System configured successfully.', 'success');
+                log('  Timezone: UTC');
+                log('  Language: English');
+                log('  Max Connections: 1000');
+                log('  Timeout: 30s');
+            }, 2000);
+        }
+
+        function debugMode() {
+            log('Entering debug mode...');
+            setTimeout(() => {
+                log('Debug mode activated.', 'success');
+                log('  Verbose logging: Enabled');
+                log('  Error tracing: Enabled');
+                log('  Performance profiling: Active');
+            }, 1500);
+        }
+
+        function runTests() {
+            log('Initiating system tests...');
+            let testsPassed = 0;
+            const totalTests = 5;
+            const interval = setInterval(() => {
+                testsPassed++;
+                log(`Running test ${testsPassed}/${totalTests}...`);
+                if (testsPassed === totalTests) {
+                    clearInterval(interval);
+                    log('All tests passed successfully.', 'success');
+                }
+            }, 1000);
+        }
+
+        function deployApplication() {
+            log('Simulating application deployment...');
+            const stages = ['Compiling', 'Packaging', 'Uploading', 'Configuring', 'Starting'];
+            let currentStage = 0;
+            const interval = setInterval(() => {
+                log(`${stages[currentStage]}...`);
+                currentStage++;
+                if (currentStage === stages.length) {
+                    clearInterval(interval);
+                    log('Application deployed successfully.', 'success');
+                }
+            }, 1000);
+        }
+
+        function rollbackChanges() {
+            log('Initiating system rollback...');
+            setTimeout(() => {
+                log('System rolled back to previous state.', 'success');
+                log('  Timestamp: 2023-05-19 15:30:00');
+                log('  Version: 2.5.1');
+            }, 2500);
+        }
+
+        function manageAPI() {
+            log('Simulating API management...');
+            setTimeout(() => {
+                log('API Status:');
+                log('  Active endpoints: 15');
+                log('  Rate limit: 1000 requests/minute');
+                log('  Authentication: OAuth 2.0');
+            }, 1500);
+        }
+
+        function manageCache() {
+            log('Managing system cache...');
+            setTimeout(() => {
+                log('Cache management completed.', 'success');
+                log('  Cache size: 256 MB');
+                log('  Items: 10,000');
+                log('  Hit ratio: 85%');
+            }, 2000);
+        }
+
+        function optimizeSystem() {
+            log('Initiating system optimization...');
+            const tasks = ['Analyzing performance', 'Optimizing database queries', 'Compressing data', 'Clearing temporary files'];
+            let currentTask = 0;
+            const interval = setInterval(() => {
+                log(tasks[currentTask]);
+                currentTask++;
+                if (currentTask === tasks.length) {
+                    clearInterval(interval);
+                    log('System optimization completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function generateReport() {
+            log('Generating system report...');
+            setTimeout(() => {
+                log('System report generated.', 'success');
+                log('  CPU usage (avg): 45%');
+                log('  Memory usage (avg): 60%');
+                log('  Disk usage: 75%');
+                log('  Network traffic: 500 GB/day');
+            }, 2500);
+        }
+
+        function configureAlerts() {
+            log('Configuring system alerts...');
+            setTimeout(() => {
+                log('Alert configuration updated.', 'success');
+                log('  CPU usage > 90%: Critical');
+                log('  Memory usage > 80%: Warning');
+                log('  Disk usage > 95%: Critical');
+                log('  Network latency > 100ms: Warning');
+            }, 2000);
+        }
+
+        function scheduleTask() {
+            log('Scheduling system task...');
+            setTimeout(() => {
+                log('Task scheduled successfully.', 'success');
+                log('  Task: Daily backup');
+                log('  Time: 02:00 AM UTC');
+                log('  Recurrence: Daily');
+            }, 1500);
+        }
+
+        function analyzeData() {
+            log('Initiating data analysis...');
+            const steps = ['Collecting data', 'Preprocessing', 'Applying algorithms', 'Generating insights'];
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                log(steps[currentStep]);
+                currentStep++;
+                if (currentStep === steps.length) {
+                    clearInterval(interval);
+                    log('Data analysis completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function compressData() {
+            log('Compressing system data...');
+            setTimeout(() => {
+                log('Data compression completed.', 'success');
+                log('  Original size: 1000 MB');
+                log('  Compressed size: 750 MB');
+                log('  Compression ratio: 25%');
+            }, 2000);
+        }
+
+        function exportData() {
+            log('Exporting system data...');
+            setTimeout(() => {
+                log('Data exported successfully.', 'success');
+                log('  Format: JSON');
+                log('  Size: 500 MB');
+                log('  Encryption: AES-256');
+            }, 2500);
+        }
+
+        function importData() {
+            log('Importing data into the system...');
+            const stages = ['Validating', 'Decrypting', 'Parsing', 'Inserting'];
+            let currentStage = 0;
+            const interval = setInterval(() => {
+                log(`${stages[currentStage]}...`);
+                currentStage++;
+                if (currentStage === stages.length) {
+                    clearInterval(interval);
+                    log('Data imported successfully.', 'success');
+                }
+            }, 1000);
+        }
+
+        function validateData() {
+            log('Validating system data...');
+            setTimeout(() => {
+                log('Data validation completed.', 'success');
+                log('  Records processed: 1,000,000');
+                log('  Valid records: 999,950');
+                log('  Invalid records: 50');
+            }, 2000);
+        }
+
+        function auditSystem() {
+            log('Initiating system audit...');
+            const areas = ['User accounts', 'File permissions', 'Network access', 'Software licenses'];
+            let currentArea = 0;
+            const interval = setInterval(() => {
+                log(`Auditing ${areas[currentArea]}...`);
+                currentArea++;
+                if (currentArea === areas.length) {
+                    clearInterval(interval);
+                    log('System audit completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function runBenchmark() {
+            log('Running system benchmark...');
+            setTimeout(() => {
+                log('Benchmark results:', 'success');
+                log('  CPU score: 15,000');
+                log('  Memory score: 12,500');
+                log('  Disk score: 9,800');
+                log('  Network score: 11,200');
+            }, 3000);
+        }
+
+        function cleanupSystem() {
+            log('Initiating system cleanup...');
+            const tasks = ['Removing temporary files', 'Clearing cache', 'Optimizing database', 'Defragmenting disk'];
+            let currentTask = 0;
+            const interval = setInterval(() => {
+                log(tasks[currentTask]);
+                currentTask++;
+                if (currentTask === tasks.length) {
+                    clearInterval(interval);
+                    log('System cleanup completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function applyPatch() {
+            log('Applying system patch...');
+            setTimeout(() => {
+                log('Patch applied successfully.', 'success');
+                log('  Patch version: 2.5.3');
+                log('  Changes: 15 files updated');
+                log('  Reboot required: No');
+            }, 2500);
+        }
+
+        function runSimulation() {
+            log('Initiating system simulation...');
+            let time = 0;
+            const interval = setInterval(() => {
+                time += 10;
+                log(`Simulation time: T+${time}s`);
+                log(`  CPU load: ${Math.floor(Math.random() * 100)}%`);
+                log(`  Memory usage: ${Math.floor(Math.random() * 100)}%`);
+                log(`  Network traffic: ${Math.floor(Math.random() * 1000)} Mbps`);
+                if (time >= 50) {
+                    clearInterval(interval);
+                    log('Simulation completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function visualizeData() {
+            log('Generating data visualization...');
+            setTimeout(() => {
+                log('Data visualization created.', 'success');
+                log('  Chart type: Line graph');
+                log('  Data points: 1,000');
+                log('  Time range: Last 30 days');
+            }, 2000);
+        }
+
+        function integrateSystem() {
+            log('Initiating system integration...');
+            const steps = ['Configuring APIs', 'Mapping data models', 'Setting up authentication', 'Testing connections'];
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                log(steps[currentStep]);
+                currentStep++;
+                if (currentStep === steps.length) {
+                    clearInterval(interval);
+                    log('System integration completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function migrateData() {
+            log('Initiating data migration...');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 20;
+                log(`Migration progress: ${progress}%`);
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    log('Data migration completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function scaleResources() {
+            log('Scaling system resources...');
+            setTimeout(() => {
+                log('Resources scaled successfully.', 'success');
+                log('  CPU cores: 8 -> 16');
+                log('  RAM: 32GB -> 64GB');
+                log('  Storage: 1TB -> 2TB');
+            }, 2500);
+        }
+
+        function monitorPerformance() {
+            log('Monitoring system performance...');
+            let time = 0;
+            const interval = setInterval(() => {
+                time += 5;
+                log(`Time: T+${time}s`);
+                log(`  Requests/sec: ${Math.floor(Math.random() * 1000)}`);
+                log(`  Avg. response time: ${Math.floor(Math.random() * 100)}ms`);
+                if (time >= 30) {
+                    clearInterval(interval);
+                    log('Performance monitoring completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function optimizeQueries() {
+            log('Optimizing database queries...');
+            const queries = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'JOIN'];
+            let currentQuery = 0;
+            const interval = setInterval(() => {
+                log(`Optimizing ${queries[currentQuery]} queries...`);
+                currentQuery++;
+                if (currentQuery === queries.length) {
+                    clearInterval(interval);
+                    log('Query optimization completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function rebuildIndexes() {
+            log('Rebuilding database indexes...');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                log(`Rebuilding progress: ${progress}%`);
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    log('Index rebuilding completed.', 'success');
+                }
+            }, 500);
+        }
+
+        function replicateData() {
+            log('Initiating data replication...');
+            const steps = ['Preparing data', 'Establishing connection', 'Transferring data', 'Verifying integrity'];
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                log(steps[currentStep]);
+                currentStep++;
+                if (currentStep === steps.length) {
+                    clearInterval(interval);
+                    log('Data replication completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function syncData() {
+            log('Synchronizing data across systems...');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 25;
+                log(`Sync progress: ${progress}%`);
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    log('Data synchronization completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function throttleRequests() {
+            log('Configuring request throttling...');
+            setTimeout(() => {
+                log('Request throttling configured.', 'success');
+                log('  Max requests/sec: 1000');
+                log('  Burst limit: 1500');
+                log('  Throttle duration: 5s');
+            }, 2000);
+        }
+
+        function loadBalanceTraffic() {
+            log('Configuring load balancer...');
+            setTimeout(() => {
+                log('Load balancer configured.', 'success');
+                log('  Algorithm: Round Robin');
+                log('  Active nodes: 5');
+                log('  Health check interval: 30s');
+            }, 2500);
+        }
+
+        function partitionData() {
+            log('Partitioning database...');
+            const tables = ['Users', 'Orders', 'Products', 'Transactions'];
+            let currentTable = 0;
+            const interval = setInterval(() => {
+                log(`Partitioning ${tables[currentTable]} table...`);
+                currentTable++;
+                if (currentTable === tables.length) {
+                    clearInterval(interval);
+                    log('Database partitioning completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function manageCluster() {
+            log('Managing server cluster...');
+            setTimeout(() => {
+                log('Cluster status:', 'success');
+                log('  Active nodes: 8');
+                log('  Load distribution: Balanced');
+                log('  Failover mechanism: Active');
+            }, 2000);
+        }
+
+        function streamData() {
+            log('Initiating data streaming...');
+            let time = 0 ;
+                        const interval = setInterval(() => {
+                time += 5;
+                log(`Streaming time: T+${time}s`);
+                log(`  Data rate: ${Math.floor(Math.random() * 100)} MB/s`);
+                log(`  Active streams: ${Math.floor(Math.random() * 10) + 1}`);
+                if (time >= 30) {
+                    clearInterval(interval);
+                    log('Data streaming completed.', 'success');
+                }
+            }, 1000);
+        }
+
+        function transformData() {
+            log('Initiating data transformation...');
+            const steps = ['Extracting', 'Cleaning', 'Normalizing', 'Loading'];
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                log(`${steps[currentStep]}...`);
+                currentStep++;
+                if (currentStep === steps.length) {
+                    clearInterval(interval);
+                    log('Data transformation completed.', 'success');
+                }
+            }, 1500);
+        }
+
+        function updateCharts() {
+            const charts = ['cpu', 'memory', 'network', 'disk'].map(type => {
+                const ctx = document.getElementById(`${type}-chart`).getContext('2d');
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 10}, (_, i) => i + 1),
+                        datasets: [{
+                            label: `${type.charAt(0).toUpperCase() + type.slice(1)} Usage`,
+                            data: Array.from({length: 10}, () => Math.random() * 100),
+                            borderColor: '#0f0',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        // Event listeners
+        inputElement.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const command = inputElement.value.trim();
+                if (command) {
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                    processCommand(command);
+                    inputElement.value = '';
+                }
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    inputElement.value = commandHistory[historyIndex];
+                }
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    inputElement.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    inputElement.value = '';
+                }
+            }
         });
 
-        // Exemplo de notificação de boas-vindas
-        setTimeout(() => {
-            showNotification('Bem-vindo ao HexaWave Files!', 'success');
-        }, 2000);
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.style.display = 'none';
+            });
+        });
+
+        // Initialize
+        simulateLoading();
     </script>
 </body>
 </html>
+        
