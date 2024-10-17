@@ -695,69 +695,72 @@
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
-        import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.esm.browser.min.js';
-        import AOS from 'https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js';
-        import tippy from 'https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy.esm.js';
-        import { Fancybox } from 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.esm.js';
-        import { Notyf } from 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.es.js';
-        import SimpleBar from 'https://cdn.jsdelivr.net/npm/simplebar@5.3.6/dist/simplebar.esm.js';
-        import Plyr from 'https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.min.js';
-        import anime from 'https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.es.js';
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.module.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+import anime from 'https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.es.js';
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCSAaeTMOB7IL9EzVBpVTVSpxNLkw5f4IQ",
-            authDomain: "hexawavesite.firebaseapp.com",
-            databaseURL: "https://hexawavesite-default-rtdb.firebaseio.com",
-            projectId: "hexawavesite",
-            storageBucket: "hexawavesite.appspot.com",
-            messagingSenderId: "277310428374",
-            appId: "1:277310428374:web:0476b4e21a05e1e31ae577",
-            measurementId: "G-JCGJ9J7RG8"
-        };
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCSAaeTMOB7IL9EzVBpVTVSpxNLkw5f4IQ",
+    authDomain: "hexawavesite.firebaseapp.com",
+    databaseURL: "https://hexawavesite-default-rtdb.firebaseio.com",
+    projectId: "hexawavesite",
+    storageBucket: "hexawavesite.appspot.com",
+    messagingSenderId: "277310428374",
+    appId: "1:277310428374:web:0476b4e21a05e1e31ae577",
+    measurementId: "G-JCGJ9J7RG8"
+};
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-        // Check if user is 
-        // Verifica o estado de autenticação
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        // Se o usuário está logado, redireciona para o dashboard
-        window.location.href = "dashboard.html";
-    } else {
-        // Se o usuário não está logado, redireciona para a página de login
-        window.location.href = "index.html";
-    }
-});
+// Function to show loading screen
+function showLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingAnimation = document.getElementById('loading-animation');
 
-        function showLoadingScreen() {
-            const loadingScreen = document.getElementById('loading-screen');
-            const loadingAnimation = document.getElementById('loading-animation');
+    anime({
+        targets: loadingAnimation,
+        opacity: [0, 1],
+        translateY: ['-20px', '0px'],
+        easing: 'easeOutExpo',
+        duration: 1000
+    });
 
+    // Return a promise that resolves when the animation is complete
+    return new Promise(resolve => {
+        setTimeout(() => {
             anime({
-                targets: loadingAnimation,
-                opacity: [0, 1],
-                translateY: ['-20px', '0px'],
-                easing: 'easeOutExpo',
-                duration: 1000
+                targets: loadingScreen,
+                opacity: 0,
+                duration: 1000,
+                easing: 'easeInOutQuad',
+                complete: function() {
+                    loadingScreen.style.display = 'none';
+                    resolve();
+                }
             });
+        }, 5000);
+    });
+}
 
-            setTimeout(() => {
-                anime({
-                    targets: loadingScreen,
-                    opacity: 0,
-                    duration: 1000,
-                    easing: 'easeInOutQuad',
-                    complete: function() {
-                        loadingScreen.style.display = 'none';
-                    }
-                });
-            }, 5000);
-        }
+// Check if user is logged in and handle loading screen
+function initializeApp() {
+    showLoadingScreen().then(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, redirect to filesfy.html
+                window.location.href = 'filesfy.html';
+            } else {
+                // User is signed out, do nothing (stay on the current page)
+                console.log("User is not signed in");
+            }
+        });
+    });
+}
+
+// Call the initialization function when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
 
         // Initialize Swiper
         const swiper = new Swiper('.swiper', {
