@@ -722,13 +722,17 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Check if user is logged in
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in, redirect to filesfy.html
-                window.location.href = 'filesfy.html';
-            }
-        });
+        // Check if user is 
+        // Verifica o estado de autenticação
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // Se o usuário está logado, redireciona para o dashboard
+        window.location.href = "dashboard.html";
+    } else {
+        // Se o usuário não está logado, redireciona para a página de login
+        window.location.href = "index.html";
+    }
+});
 
         function showLoadingScreen() {
             const loadingScreen = document.getElementById('loading-screen');
