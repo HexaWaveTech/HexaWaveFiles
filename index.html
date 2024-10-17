@@ -1,150 +1,33 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HexaWave Files</title>
-    <!-- Importação de bibliotecas CSS -->
+    <title>HexaWave Files - Compartilhamento de Arquivos Inteligente</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6.3.7/themes/light.css">
     <style>
-        /* Estilos CSS embutidos */
         :root {
-            --primary-color: #000000;
-            --secondary-color: #ffffff;
+            --primary-color: #ffffff;
+            --secondary-color: #f8f9fa;
+            --text-color: #333333;
             --accent-color: #3498db;
+            --accent-hover: #2980b9;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--primary-color);
-            color: var(--secondary-color);
-            transition: background-color 0.3s ease;
-        }
-
-        /* Estilos para a tela de inicialização */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--primary-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        #splash-logo {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--secondary-color);
-            opacity: 0;
-            animation: fadeIn 2s ease-in-out forwards, scaleUp 2s ease-in-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes scaleUp {
-            from { transform: scale(0.5); }
-            to { transform: scale(1); }
-        }
-
-        /* Estilos para o menu hambúrguer */
-        .hamburger-menu {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .hamburger-icon {
-            width: 30px;
-            height: 20px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .hamburger-icon span {
-            display: block;
-            position: absolute;
-            height: 3px;
-            width: 100%;
-            background: var(--secondary-color);
-            border-radius: 3px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .hamburger-icon span:nth-child(1) { top: 0px; }
-        .hamburger-icon span:nth-child(2) { top: 8px; }
-        .hamburger-icon span:nth-child(3) { top: 16px; }
-
-        .hamburger-menu.open .hamburger-icon span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .hamburger-menu.open .hamburger-icon span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger-menu.open .hamburger-icon span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Estilos para o menu de navegação */
-        .nav-menu {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 50px 20px;
-            transition: right 0.3s ease-in-out;
-            z-index: 999;
-        }
-
-        .nav-menu.open {
-            right: 0;
-        }
-
-        .nav-menu ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .nav-menu ul li {
-            margin-bottom: 20px;
-        }
-
-        .nav-menu ul li a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-        }
-
-        .nav-menu ul li a:hover {
-            color: var(--accent-color);
-        }
-
-        /* Estilos para as seções */
-        section {
-            padding: 80px 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -153,139 +36,446 @@
             padding: 0 20px;
         }
 
-        h1, h2, h3 {
-            margin-bottom: 20px;
-        }
-
-        /* Estilos para o botão de tema */
-        #theme-toggle {
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(135deg, #f6f8fa 0%, #e9ecef 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        #hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        #hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: #666;
+        }
+
+        .cta-button {
+            display: inline-block;
             background-color: var(--accent-color);
-            color: var(--secondary-color);
-            border: none;
-            padding: 10px 20px;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        #features {
+            padding: 80px 0;
+            background-color: var(--secondary-color);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* About Section */
+        #about {
+            padding: 80px 0;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Testimonials Section */
+        #testimonials {
+            background-color: var(--secondary-color);
+            padding: 80px 0;
+        }
+
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 80px 0;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            #hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
             border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-        #theme-toggle:hover {
-            background-color: #2980b9;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-hover);
         }
 
-        /* Adicione mais estilos conforme necessário */
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
+        .notification.show {
+            opacity: 1;
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+        }
+
+        .notification.warning {
+            background-color: var(--warning-color);
+        }
+
+        .notification.error {
+            background-color: var(--error-color);
+        }
     </style>
 </head>
 <body>
-    <!-- Tela de inicialização -->
-    <div id="splash-screen">
-        <div id="splash-logo">HexaWave Files</div>
-    </div>
+    <!-- Header -->
+    <header>
+        <nav class="navbar container">
+            <a href="#" class="navbar-brand">
+                <img src="https://i.ibb.co/DGwGS5r/watermark-preview-image20241017-1-1i24v3l-transformed-removebg-preview.png" alt="HexaWave Files Logo">
+            </a>
+            <div class="nav-links">
+                <a href="#features">Recursos</a>
+                <a href="#about">Sobre</a>
+                <a href="#testimonials">Depoimentos</a>
+                <a href="#contact">Contato</a>
+                <a href="#" class="cta-button">Começar</a>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Menu hambúrguer -->
-    <div class="hamburger-menu">
-        <div class="hamburger-icon">
-            <span></span>
-            <span></span>
-            <span></span>
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <h1 class="animate__animated animate__fadeInDown">Compartilhe Arquivos com Segurança e Facilidade</h1>
+            <p class="animate__animated animate__fadeInUp">HexaWave Files oferece uma plataforma intuitiva e segura para armazenar, compartilhar e colaborar em seus arquivos importantes.</p>
+            <a href="#" class="cta-button animate__animated animate__bounceIn">Experimente Gratuitamente</a>
         </div>
-    </div>
+    </section>
 
-    <!-- Menu de navegação -->
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="#home">Início</a></li>
-            <li><a href="#about">Sobre</a></li>
-            <li><a href="#features">Recursos</a></li>
-            <li><a href="#contact">Contato</a></li>
-            <li><a href="#login">Login</a></li>
-            <li><a href="#register">Cadastro</a></li>
-            <li><a href="https://github.com/seu-usuario/hexawave-files" target="_blank">Código Fonte</a></li>
-        </ul>
-    </nav>
-
-    <!-- Conteúdo principal -->
-    <main>
-        <!-- Seção Início -->
-        <section id="home">
-            <div class="container">
-                <h1 class="animate__animated animate__fadeInDown">Bem-vindo ao HexaWave Files</h1>
-                <p class="animate__animated animate__fadeInUp">Compartilhe e gerencie seus arquivos de forma segura e eficiente.</p>
-                <img src="https://i.ibb.co/DGwGS5r/watermark-preview-image20241017-1-1i24v3l-transformed-removebg-preview.png" alt="Logo HexaWave Files" class="animate__animated animate__zoomIn">
-            </div>
-        </section>
-
-        <!-- Seção Sobre -->
-        <section id="about">
-            <div class="container">
-                <h2 data-aos="fade-up">Sobre o HexaWave Files</h2>
-                <p data-aos="fade-up" data-aos-delay="200">HexaWave Files é uma plataforma inovadora de compartilhamento de arquivos que combina segurança, facilidade de uso e recursos avançados para atender às suas necessidades de gerenciamento de arquivos.</p>
-                <img src="https://i.ibb.co/N6szRZK/images.jpg" alt="Planeta Terra" data-aos="zoom-in" data-aos-delay="400">
-            </div>
-        </section>
-
-        <!-- Seção Recursos -->
-        <section id="features">
-            <div class="container">
-                <h2 data-aos="fade-up">Recursos</h2>
-                <div class="row">
-                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                        <i class="fas fa-lock fa-3x"></i>
-                        <h3>Segurança Avançada</h3>
-                        <p>Seus arquivos são protegidos com criptografia de ponta a ponta.</p>
-                    </div>
-                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
-                        <i class="fas fa-share-alt fa-3x"></i>
-                        <h3>Compartilhamento Fácil</h3>
-                        <p>Compartilhe arquivos com apenas alguns cliques.</p>
-                    </div>
-                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
-                        <i class="fas fa-cloud fa-3x"></i>
-                        <h3>Armazenamento em Nuvem</h3>
-                        <p>Acesse seus arquivos de qualquer lugar, a qualquer momento.</p>
-                    </div>
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <h2 class="text-center mb-5">Recursos Incríveis</h2>
+            <div class="feature-grid">
+                <div class="feature-item" data-aos="fade-up">
+                    <i class="feature-icon fas fa-lock"></i>
+                    <h3>Segurança Avançada</h3>
+                    <p>Proteja seus arquivos com criptografia de ponta a ponta e autenticação de dois fatores.</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                    <i class="feature-icon fas fa-share-alt"></i>
+                    <h3>Compartilhamento Fácil</h3>
+                    <p>Compartilhe arquivos e pastas com apenas alguns cliques, definindo permissões personalizadas.</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                    <i class="feature-icon fas fa-sync-alt"></i>
+                    <h3>Sincronização Automática</h3>
+                    <p>Mantenha seus arquivos atualizados em todos os dispositivos com sincronização em tempo real.</p>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                    <i class="feature-icon fas fa-history"></i>
+                    <h3>Controle de Versões</h3>
+                    <p>Acesse e restaure versões anteriores de seus arquivos com facilidade.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Seção Contato -->
-        <section id="contact">
-            <div class="container">
-                <h2 data-aos="fade-up">Entre em Contato</h2>
-                <form data-aos="fade-up" data-aos-delay="200">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Mensagem</label>
-                        <textarea class="form-control" id="message" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar</button>
-                </form>
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text" data-aos="fade-right">
+                    <h2>Sobre o HexaWave Files</h2>
+                    <p>HexaWave Files nasceu da necessidade de uma solução de compartilhamento de arquivos que fosse ao mesmo tempo segura e fácil de usar. Nossa missão é proporcionar uma experiência sem complicações para indivíduos e equipes que precisam colaborar em projetos e compartilhar informações importantes.</p>
+                    <p>Com uma equipe dedicada de engenheiros e designers, estamos constantemente inovando e melhorando nossa plataforma para atender às necessidades em constante evolução de nossos usuários.</p>
+                </div>
+                <div class="about-image" data-aos="fade-left">
+                    <img src="https://i.ibb.co/N6szRZK/images.jpg" alt="Planeta Terra">
+                </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <!-- Botão de alternância de tema -->
-    <button id="theme-toggle">Alternar Tema</button>
+    <!-- Testimonials Section -->
+    <section id="testimonials">
+        <div class="container">
+            <h2 class="text-center mb-5">O que Nossos Clientes Dizem</h2>
+            <div class="swiper testimonial-slider">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Avatar" class="testimonial-avatar">
+                            <p>"HexaWave Files revolucionou a forma como nossa equipe colabora em projetos. É incrivelmente fácil de usar e super seguro!"</p>
+                            <h4>Maria Silva</h4>
+                            <p>Gerente de Projetos,   TechCorp</p>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar" class="testimonial-avatar">
+                            <p>"Desde que começamos a usar o HexaWave Files, nossa produtividade aumentou significativamente. Recomendo a todas as empresas!"</p>
+                            <h4>João Santos</h4>
+                            <p>CEO, Inovação Ltda</p>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Avatar" class="testimonial-avatar">
+                            <p>"A segurança e a facilidade de uso do HexaWave Files são incomparáveis. É a solução perfeita para nossas necessidades de compartilhamento de arquivos."</p>
+                            <h4>Ana Oliveira</h4>
+                            <p>Diretora de TI, Mega Corporação</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Notificações -->
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="text-center mb-5">Entre em Contato</h2>
+            <form class="contact-form" data-aos="fade-up">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Seu Nome" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Seu E-mail" required>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" rows="5" placeholder="Sua Mensagem" required></textarea>
+                </div>
+                <button type="submit" class="cta-button">Enviar Mensagem</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Termos de Serviço</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">FAQ</a>
+                <a href="#">Suporte</a>
+            </div>
+            <p>&copy; 2024 HexaWave Files. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Notification Element -->
     <div id="notification" class="notification"></div>
 
-    <!-- Importação de bibliotecas JavaScript -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
     <script type="module">
         // Importação dos módulos do Firebase
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
@@ -318,57 +508,135 @@
             }
         });
 
-        // Código JavaScript
-        document.addEventListener('DOMContentLoaded', () => {
-            // Animação da tela de inicialização
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-            }, 5000);
-
-            // Inicialização do AOS
-            AOS.init();
-
-            // Funcionalidade do menu hambúrguer
-            const hamburger = document.querySelector('.hamburger-menu');
-            const navMenu = document.querySelector('.nav-menu');
-
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('open');
-                navMenu.classList.toggle('open');
-            });
-
-            // Alternância de tema
-            const themeToggle = document.getElementById('theme-toggle');
-            const body = document.body;
-
-            themeToggle.addEventListener('click', () => {
-                body.classList.toggle('light-theme');
-                if (body.classList.contains('light-theme')) {
-                    body.style.setProperty('--primary-color', '#ffffff');
-                    body.style.setProperty('--secondary-color', '#000000');
-                } else {
-                    body.style.setProperty('--primary-color', '#000000');
-                    body.style.setProperty('--secondary-color', '#ffffff');
-                }
-            });
-
-            // Função para exibir notificações
-            function showNotification(message, type = 'info') {
-                const notification = document.getElementById('notification');
-                notification.textContent = message;
-                notification.className = `notification ${type}`;
-                notification.style.display = 'block';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-            }
-
-            // Exemplo de uso da notificação
-            
-            showNotification('Bem-vindo ao HexaWave Files!', 'success');
-
-            // Adicione mais funcionalidades JavaScript conforme necessário
+        // Inicialização de bibliotecas e configurações
+        AOS.init({
+            duration: 1000,
+            once: true
         });
+
+        new Swiper('.testimonial-slider', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+
+        // Animações com GSAP
+        gsap.from('.feature-item', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '#features',
+                start: 'top 80%',
+            },
+        });
+
+        // Header scroll effect
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll para links de navegação
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Tooltips
+        tippy('[data-tippy-content]', {
+            theme: 'light',
+            animation: 'scale',
+        });
+
+        // Função para exibir notificações
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Manipulação do formulário de contato
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Aqui você adicionaria a lógica para enviar o formulário
+            showNotification('Mensagem enviada com sucesso!', 'success');
+        });
+
+        // Animação de contagem para estatísticas
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Exemplo de uso da animação de contagem (adicione elementos com classe 'counter' ao seu HTML)
+        document.querySelectorAll('.counter').forEach(counter => {
+            animateValue(counter, 0, parseInt(counter.getAttribute('data-target')), 2000);
+        });
+
+        // Lazy loading para imagens
+        document.addEventListener("DOMContentLoaded", function() {
+            var lazyloadImages = document.querySelectorAll("img.lazy");    
+            var lazyloadThrottleTimeout;
+            
+            function lazyload () {
+                if(lazyloadThrottleTimeout) {
+                    clearTimeout(lazyloadThrottleTimeout);
+                }    
+                
+                lazyloadThrottleTimeout = setTimeout(function() {
+                    var scrollTop = window.pageYOffset;
+                    lazyloadImages.forEach(function(img) {
+                        if(img.offsetTop < (window.innerHeight + scrollTop)) {
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                        }
+                    });
+                    if(lazyloadImages.length == 0) { 
+                        document.removeEventListener("scroll", lazyload);
+                        window.removeEventListener("resize", lazyload);
+                        window.removeEventListener("orientationChange", lazyload);
+                    }
+                }, 20);
+            }
+            
+            document.addEventListener("scroll", lazyload);
+            window.addEventListener("resize", lazyload);
+            window.addEventListener("orientationChange", lazyload);
+        });
+
+        // Exemplo de notificação de boas-vindas
+        setTimeout(() => {
+            showNotification('Bem-vindo ao HexaWave Files!', 'success');
+        }, 2000);
     </script>
 </body>
 </html>
